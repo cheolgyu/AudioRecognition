@@ -1,0 +1,4 @@
+dataset/*
+output/*train*
+output/*graph*
+output/*logs*

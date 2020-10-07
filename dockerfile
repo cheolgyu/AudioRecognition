@@ -1,5 +1,5 @@
 
-FROM tensorflow/tensorflow:1.15.4-gpu-py3-jupyter
+FROM tensorflow/tensorflow:1.13.1-gpu-py3-jupyter
 
 RUN apt-get update && \
       apt-get -y install sudo
@@ -27,8 +27,8 @@ RUN pip install --user pycocotools
 RUN mkdir -p /workspace/tensorflow/models/research
 RUN cd /workspace/tensorflow/models/research
 
-WORKDIR /
-RUN apt-get -y install git && git clone https://github.com/tensorflow/tensorflow.git --branch r1.15 --single-branch --depth 1
+WORKDIR /workspace
+# RUN apt-get -y install git && git clone https://github.com/tensorflow/tensorflow.git --branch r1.13 --single-branch --depth 1
 
 EXPOSE 8888
 EXPOSE 6006
