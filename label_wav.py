@@ -74,8 +74,9 @@ def run_graph(wav_data, labels, input_layer_name, output_layer_name,
     for d in devices:
         print(d.name)
     print("2222222222222222")
-    
-    
+    print("================================")
+    print(sess.run(softmax_tensor, {input_layer_name: wav_data}))
+    print("================================")
     predictions, = sess.run(softmax_tensor, {input_layer_name: wav_data})
     print("33333333333333333333333")
     # Sort to show labels in order of confidence
