@@ -23,6 +23,16 @@ from IPython.display import display, Audio
 
 from tensorflow import keras 
 
+def detail(interpreter):
+  interpreter.allocate_tensors()
+  input_details = interpreter.get_input_details()
+  output_details = interpreter.get_output_details()
+  print("======================================")
+  print(input_details)
+  print("======================================")
+  print(output_details)
+
+
 # speaker_model.tflite
 # ======================================
 # [{'name': 'input', 'index': 0, 'shape': array([   1, 8000,    1], dtype=int32), 'shape_signature': array([  -1, 8000,    1], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
@@ -43,13 +53,7 @@ def speaker_model():
   tflite_model =   converter.convert()
   # Run the model with TensorFlow Lite
   interpreter = tf.lite.Interpreter(model_content=tflite_model)
-  interpreter.allocate_tensors()
-  input_details = interpreter.get_input_details()
-  output_details = interpreter.get_output_details()
-  print("======================================")
-  print(input_details)
-  print("======================================")
-  print(output_details)
+  detail(interpreter)
 
 # conv_actions_frozen
 # ======================================
@@ -60,12 +64,5 @@ def speaker_model():
 def conv_actions_frozen():
   tflite_path = 'conv_actions_frozen.tflite'
   interpreter = tf.lite.Interpreter(model_path=tflite_path)
-  interpreter.allocate_tensors()
-  input_details = interpreter.get_input_details()
-  output_details = interpreter.get_output_details()
-  print("======================================")
-  print(input_details)
-  print("======================================")
-  print(output_details)
+  detail(interpreter)
 
-conv_actions_frozen()  

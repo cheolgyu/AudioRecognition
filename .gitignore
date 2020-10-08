@@ -7,3 +7,4 @@ tensorflow/*
 checkpoint
 *.h5
 *.tflite
+*.pb
