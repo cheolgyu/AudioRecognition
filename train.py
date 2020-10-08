@@ -48,7 +48,7 @@ EXPECTED_WAVEFORM_LEN = preproc_model.input_shape[-1]
 # Where the Speech Commands v0.02 dataset has been downloaded.
 DATA_ROOT = "/tmp/speech_commands_v0.02"
 
-WORDS = ("_background_noise_snippets_", "bubbling")
+WORDS = ("_background_noise_snippets_","yes")
 
 
 
@@ -104,7 +104,7 @@ def resample_wavs(dir_path, target_sample_rate=44100):
 for word in WORDS:
   word_dir = os.path.join(DATA_ROOT, word)
   assert os.path.isdir(word_dir)
-  #resample_wavs(word_dir, target_sample_rate=TARGET_SAMPLE_RATE)
+ # resample_wavs(word_dir, target_sample_rate=TARGET_SAMPLE_RATE)
 
 
 @tf.function
@@ -193,22 +193,30 @@ input_wav_paths_and_labels = []
 for i, word in enumerate(WORDS):
   wav_paths = glob.glob(os.path.join(DATA_ROOT, word, "*_%shz.wav" % TARGET_SAMPLE_RATE))
   print("Found %d examples for class %s" % (len(wav_paths), word))
+  print("=================오류시작===================wav_paths="+str(len(wav_paths)))
   labels = [i] * len(wav_paths)
-  input_wav_paths_and_labels.extend(zip(wav_paths, labels))
+  
+  zz = zip(wav_paths, labels)
+  print("=================오류시작===================labels=",len(labels))
+  input_wav_paths_and_labels.extend(zz)
+  print("=================끝? ===================input_wav_paths_and_labels=",len(input_wav_paths_and_labels))
 random.shuffle(input_wav_paths_and_labels)
+
   
 input_wav_paths, labels = ([t[0] for t in input_wav_paths_and_labels],
                            [t[1] for t in input_wav_paths_and_labels])
 dataset = get_dataset(input_wav_paths, labels)
 
-
-
 print(
     "Loading dataset and converting data to numpy arrays. "
     "This may take a few minutes...")
+print("=================여기가오류? ===================000=")
 xs_and_ys = list(dataset)
+print("=================여기가오류? ===================111=")
 xs = np.stack([item[0] for item in xs_and_ys])
+print("=================여기가오류? ===================222=")
 ys = np.stack([item[1] for item in xs_and_ys])
+print("=================여기가오류? ===================333=")
 print("Done.")
 
 
@@ -241,11 +249,11 @@ callbacks = [
         # the current checkpoint if and only if
         # the `val_loss` score has improved.
         # The saved model name will include the current epoch.
-        filepath="checkpoint/mymodel_{epoch}",
+        filepath="checkpoint/my_model_{epoch}",
         save_best_only=True,  # Only save a model if `val_loss` has improved.
         monitor="val_loss",
         verbose=1,
-        period=500
+        period=1000
     )
 ]
 
@@ -255,7 +263,7 @@ model.summary()
 
 # Train the model.
 history = model.fit(xs, ys, batch_size=256, validation_split=0.3, shuffle=True, epochs=50 , callbacks=callbacks)
-model.save('model.h5')
+model.save('my_model.h5')
 
 
 print(history.history)
@@ -281,12 +289,21 @@ combined_model.add(model)
 combined_model.build([None, EXPECTED_WAVEFORM_LEN])
 combined_model.summary()
 
-tflite_output_path = '/tmp/tfjs-sc-model/combined_model.tflite'
+tflite_output_path = 'my_model.tflite'
 converter = tf.lite.TFLiteConverter.from_keras_model(combined_model)
 converter.target_spec.supported_ops = [
     tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS
 ]
 with open(tflite_output_path, 'wb') as f:
-    f.write(converter.convert())
-print("Saved tflite file at: %s" % tflite_output_path)
+    tflite_model = converter.convert()
+    f.write(tflite_model)
+    print("Saved tflite file at: %s" % tflite_output_path)
 
+    interpreter = tf.lite.Interpreter(model_content=tflite_model)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    print("======================================")
+    print(input_details)
+    print("======================================")
+    print(output_details)

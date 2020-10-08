@@ -4,3 +4,6 @@ output/*graph*
 output/*logs*
 tensorflow/*
 16000_pcm*
+checkpoint
+*.h5
+*.tflite

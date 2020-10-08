@@ -24,5 +24,30 @@
 ### tensorboard
     tensorboard --logdir /workspace/AudioRecognition/output/logs
 
- cp -r ./dataset/bubbling /tmp/speech_commands_v0.02
+rm -rf /tmp/speech_commands_v0.02/bubbling
+mkdir /tmp/speech_commands_v0.02/bubbling
+ cp -r ./dataset/bubbling/sound* /tmp/speech_commands_v0.02/bubbling
     
+```
+
+# speaker_model.tflite <== 케라스 예제 
+# ======================================
+# [{'name': 'input', 'index': 0, 'shape': array([   1, 8000,    1], dtype=int32), 'shape_signature': array([  -1, 8000,    1], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+# ======================================
+# [{'name': 'Identity', 'index': 125, 'shape': array([1, 1], dtype=int32), 'shape_signature': array([-1,  1], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+
+# conv_actions_frozen <== 안드로이드 다운 모델
+# ======================================
+# [{'name': 'decoded_sample_data', 'index': 14, 'shape': array([16000,     1], dtype=int32), 'shape_signature': array([16000,     1], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}, {'name': 'decoded_sample_data:1', 'index': 15, 'shape': array([1], dtype=int32), 'shape_signature': array([1], dtype=int32), 'dtype': <class 'numpy.int32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+# ======================================
+# [{'name': 'labels_softmax', 'index': 16, 'shape': array([ 1, 12], dtype=int32), 'shape_signature': array([ 1, 12], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+
+my_model <== js 예제
+======================================
+[{'name': 'audio_preproc_input', 'index': 0, 'shape': array([    1, 44032], dtype=int32), 'shape_signature': array([   -1, 44032], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+======================================
+[{'name': 'Identity', 'index': 72, 'shape': array([1, 2], dtype=int32), 'shape_signature': array([-1,  2], dtype=int32), 'dtype': <class 'numpy.float32'>, 'quantization': (0.0, 0), 'quantization_parameters': {'scales': array([], dtype=float32), 'zero_points': array([], dtype=int32), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+
+
+
+```

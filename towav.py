@@ -28,7 +28,7 @@ def r2():
         sound = sound.set_frame_rate(16000)
         
         for i, chunk in enumerate(sound[::100]):
-            with open("dataset/bubbling/sound_"+str(x)+"_-%s.wav" % i, "wb") as f:
+            with open("dataset/bubbling/sound"+str(x)+"%s.wav" % i, "wb") as f:
                 chunk.export(f, format="wav")    
 def r3():
     src = "dataset/bubbling/*.wav"
