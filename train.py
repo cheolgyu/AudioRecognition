@@ -48,7 +48,7 @@ EXPECTED_WAVEFORM_LEN = preproc_model.input_shape[-1]
 # Where the Speech Commands v0.02 dataset has been downloaded.
 DATA_ROOT = "/tmp/speech_commands_v0.02"
 
-WORDS = ("_background_noise_snippets_", "no", "yes")
+WORDS = ("_background_noise_snippets_", "bubbling")
 
 
 
@@ -233,16 +233,36 @@ model.add(tf.keras.layers.Dense(units=len(WORDS), activation="softmax"))
 # during transfer learning.
 for layer in model.layers[:-1]:
   layer.trainable = False
+from tensorflow import keras
+callbacks = [
+    keras.callbacks.ModelCheckpoint(
+        # Path where to save the model
+        # The two parameters below mean that we will overwrite
+        # the current checkpoint if and only if
+        # the `val_loss` score has improved.
+        # The saved model name will include the current epoch.
+        filepath="checkpoint/mymodel_{epoch}",
+        save_best_only=True,  # Only save a model if `val_loss` has improved.
+        monitor="val_loss",
+        verbose=1,
+        period=500
+    )
+]
 
 model.compile(optimizer="sgd", loss="sparse_categorical_crossentropy", metrics=["acc"])
 model.summary()
 
 
 # Train the model.
-model.fit(xs, ys, batch_size=256, validation_split=0.3, shuffle=True, epochs=50)
+history = model.fit(xs, ys, batch_size=256, validation_split=0.3, shuffle=True, epochs=50 , callbacks=callbacks)
+model.save('model.h5')
 
 
+print(history.history)
 
+print("Evaluate on test data")
+# results = model.evaluate(x_test, y_test, batch_size=128)
+# print("test loss, test acc:", results)
 
 # # Convert the model to TensorFlow.js Layers model format.
 

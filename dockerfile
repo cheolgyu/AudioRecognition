@@ -14,4 +14,5 @@ RUN curl -o /tmp/speech_commands_v0.02/speech_commands_v0.02.tar.gz -fSsL http:/
 RUN cd  /tmp/speech_commands_v0.02 && tar xzf speech_commands_v0.02.tar.gz
 
 RUN pip install librosa tensorflowjs tqdm
+RUN apt-get install -y ffmpeg
 EXPOSE 6006

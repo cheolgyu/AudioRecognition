@@ -3,3 +3,4 @@ output/*train*
 output/*graph*
 output/*logs*
 tensorflow/*
+16000_pcm*
