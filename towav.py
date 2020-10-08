@@ -25,6 +25,9 @@ def r2():
         sound = AudioSegment.from_file(src, format="wav")
         
         for i, chunk in enumerate(sound[::1000]):
-            with open("dataset/bubbling/sound_+"+str(x)+"_-%s.mp3" % i, "wb") as f:
+            with open("dataset/bubbling/sound_+"+str(x)+"_-%s.wav" % i, "wb") as f:
                 chunk.export(f, format="wav")    
 r2()            
+
+# for f in *.mp3; do mv -- "$f" "${f%.prog}.wav" 
+# rename 's/.mp3/.wav/' *.mp3
