@@ -15,8 +15,46 @@
 
 # 설치
     ```
+    # 설치
+    1.13.1
+    git clone https://github.com/tensorflow/tensorflow.git --branch r1.13 --single-branch --depth 1
+    docker build --pull --rm -f "dockerfile" -t tf-audio:latest .
+    docker run  -d  -it --runtime=nvidia  --name audio -v ~/workspace/AudioRecognition:/workspace/AudioRecognition: -p 8888:8888 -p 6006:6006 tf-audio:latest
+
+    # 훈련
+    python /workspace/AudioRecognition/tensorflow/tensorflow/examples/speech_commands/train.py \
+        --data_dir=/workspace/AudioRecognition/dataset \
+        --wanted_words=bubbling \
+        --summaries_dir=/workspace/AudioRecognition/output/logs \
+        --start_checkpoint=/workspace/AudioRecognition/output/train/conv.ckpt-6700 \
+        --train_dir=/workspace/AudioRecognition/output/train 
+
+
+    # tensorboard
+    tensorboard --logdir /workspace/AudioRecognition/output/logs
+
+    # Training Finished
+    python /workspace/AudioRecognition/tensorflow/tensorflow/examples/speech_commands/freeze.py \
+        --wanted_words=bubbling \
+        --start_checkpoint=/workspace/AudioRecognition/output/train/conv.ckpt-6700 \
+        --output_file=/workspace/AudioRecognition/output/graph/my_frozen_graph_6700.pb
+
+        python /workspace/AudioRecognition/tensorflow/tensorflow/examples/speech_commands/label_wav.py \
+        --graph=/workspace/AudioRecognition/output/graph/my_frozen_graph_6700.pb \
+        --labels=/workspace/AudioRecognition/output/train/conv_labels.txt \
+        --wav=/workspace/AudioRecognition/00.wav
+
+        python /workspace/AudioRecognition/tensorflow/tensorflow/examples/speech_commands/label_wav.py \
+        --graph=/workspace/AudioRecognition/output/graph/my_frozen_graph.pb \
+        --labels=/workspace/AudioRecognition/output/train/conv_labels.txt \
+        --wav=/workspace/AudioRecognition/dataset/dog/fe1916ba_nohash_1.wav
+
+    ```
+
+    ```
+    js- 2.3.1
     cd ~/worksapce/AudioRecognition 
-    docker build -f "dockerfile" -t tf-audio:latest .
+    docker build -f "dockerfile-2.3" -t tf-audio:latest .
     docker run  -d  -it --runtime=nvidia   --name tf-audio -v  $(pwd):/tf  -p 8888:8888 -p 6006:6006 tf-audio:latest 
     ```
 # 실행

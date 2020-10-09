@@ -1,18 +1,36 @@
+FROM tensorflow/tensorflow:1.13.1-gpu-py3-jupyter
 
-FROM tensorflow/tensorflow:2.3.1-gpu-jupyter
-RUN apt-get install -y libsndfile1
-RUN mkdir -p /tmp/tfjs-sc-model
-RUN curl -o /tmp/tfjs-sc-model/metadata.json -fsSL https://storage.googleapis.com/tfjs-models/tfjs/speech-commands/v0.3/browser_fft/18w/metadata.json 
-RUN curl -o /tmp/tfjs-sc-model/model.json -fsSL https://storage.googleapis.com/tfjs-models/tfjs/speech-commands/v0.3/browser_fft/18w/model.json
-RUN curl -o /tmp/tfjs-sc-model/group1-shard1of2 -fSsL https://storage.googleapis.com/tfjs-models/tfjs/speech-commands/v0.3/browser_fft/18w/group1-shard1of2
-RUN curl -o /tmp/tfjs-sc-model/group1-shard2of2 -fsSL https://storage.googleapis.com/tfjs-models/tfjs/speech-commands/v0.3/browser_fft/18w/group1-shard2of2
-RUN curl -o /tmp/tfjs-sc-model/sc_preproc_model.tar.gz -fSsL https://storage.googleapis.com/tfjs-models/tfjs/speech-commands/conversion/sc_preproc_model.tar.gz
-RUN cd /tmp/tfjs-sc-model/ && tar xzvf sc_preproc_model.tar.gz
+RUN apt-get update && \
+      apt-get -y install sudo
 
-RUN mkdir -p /tmp/speech_commands_v0.02
-RUN curl -o /tmp/speech_commands_v0.02/speech_commands_v0.02.tar.gz -fSsL http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz
-RUN cd  /tmp/speech_commands_v0.02 && tar xzf speech_commands_v0.02.tar.gz
+RUN DEBIAN_FRONTEND="noninteractive"  apt-get install -y  protobuf-compiler python-pil python-lxml python-tk
 
-RUN pip install librosa tensorflowjs tqdm
-RUN apt-get install -y ffmpeg
+RUN pip install --user Cython
+RUN pip install --user contextlib2
+RUN pip install --user jupyter
+RUN pip install --user matplotlib
+RUN pip install --user tf_slim
+
+RUN pip install --user Cython
+RUN pip install --user contextlib2
+RUN pip install --user pillow
+RUN pip install --user lxml
+RUN pip install --user jupyter
+RUN pip install --user matplotlib
+RUN pip install --user tf_slim
+
+RUN pip install pandas 
+
+RUN pip install --user pycocotools
+
+RUN mkdir -p /workspace/tensorflow/models/research
+RUN cd /workspace/tensorflow/models/research
+
+WORKDIR /workspace
+# RUN apt-get -y install git && git clone https://github.com/tensorflow/tensorflow.git --branch r1.13 --single-branch --depth 1
+
+EXPOSE 8888
 EXPOSE 6006
+WORKDIR /workspace/AudioRecognition
+
+ENV PYTHONPATH "${PYTHONPATH}:/workspace/tensorflow/models/research:/workspace/tensorflow/models/research/slim"

@@ -21,15 +21,16 @@ def r1():
 
 def r2():
     for x in range(5):
-        src = "dataset/bubbling/0"+str(x)+".wav"
+        src = "0"+str(x)+".wav"
         dst = "dataset/bubbling/0"+str(x)+".wav"    
         sound = AudioSegment.from_file(src, format="wav")
         sound.set_channels(1)
         sound = sound.set_frame_rate(16000)
         
-        for i, chunk in enumerate(sound[::100]):
-            with open("dataset/bubbling/sound"+str(x)+"%s.wav" % i, "wb") as f:
-                chunk.export(f, format="wav")    
+        for i, chunk in enumerate(sound[::1000]):
+            if i < 20:
+                with open("dataset/bubbling/bbb"+str(x)+"%s.wav" % i, "wb") as f:
+                    chunk.export(f, format="wav")    
 def r3():
     src = "dataset/bubbling/*.wav"
     file_list = glob.glob(src)   
