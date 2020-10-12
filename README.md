@@ -1,4 +1,12 @@
-# 물끓는 소리나 불타는 소리 인식하기.   
+<details>
+    <summary> js - 멍멍이 소리 인식하기 </summary>
+
+    asdfasfd
+</details>
+    
+<details>
+    <summary> android - 물끓는 소리나 불타는 소리 인식하기. </summary>
+
     1. 일단 링크의 에제 돌려보기.
     2. 물소리 불타는 소리 모으기
     3. 학습시키기
@@ -89,3 +97,5 @@ my_model <== js 예제
 
 
 ```
+
+</details>
