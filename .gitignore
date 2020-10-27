@@ -9,4 +9,6 @@ checkpoint
 *.tflite
 *.pb
 *.wav
-
+**/*.bin
+**/*.h5
+*.h5

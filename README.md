@@ -1,12 +1,28 @@
 <details>
     <summary> js - 멍멍이 소리 인식하기 </summary>
 
-    asdfasfd
+    파이썬으로 훈련후 tflite로 만들고 web에서 실행
+    [예제]( https://github.com/tensorflow/tfjs-models/blob/master/speech-commands/training/browser-fft/training_custom_audio_model_in_python.ipynb   ) 
+    케라스로 돌리고 케라스에서 tflite로 컨버터함.
+
+    dockerfile = dockerfile-2.3 
+    workspace = puppy_sound
+    puppy_sound/output/train
+    puppy_sound/output/tflite
+    puppy_sound/output/logs
+
+    docker build 
+    sudo chmod -R 777 . 
+    docker build --pull -f "dockerfile-2.3" -t web-audio:latest . 
+    docker run  -d  -it --runtime=nvidia  --name web-audio -v ~/workspace/AudioRecognition/puppy_sound:/tf/notebooks: -p 8888:8888 -p 6006:6006 web-audio:latest
+
+    
+    
 </details>
     
 <details>
     <summary> android - 물끓는 소리나 불타는 소리 인식하기. </summary>
-
+# https://play.google.com/store/apps/details?id=com.highserpot.bubbling
     1. 일단 링크의 에제 돌려보기.
     2. 물소리 불타는 소리 모으기
     3. 학습시키기
